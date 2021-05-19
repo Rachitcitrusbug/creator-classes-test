@@ -1,7 +1,10 @@
-import React from "react";
-import ClassesGraphic from "../../assets/images/latest/hundreds-of-classes-graphic.png";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import ClassesGraphic from '../../assets/images/latest/hundreds-of-classes-graphic.png';
 
 function HundredsOfClasses() {
+  const authToken = localStorage.getItem('token');
+
   return (
     <>
       <section className="block-banner-new-classes-section block-banner-classes-01">
@@ -13,9 +16,9 @@ function HundredsOfClasses() {
                   <div className="center-content-div">
                     <div className="center-content-row">
                       <h2>
-                        {" "}
-                        <span className="block">Hundreds of </span>{" "}
-                        <span className="block">Classes</span>{" "}
+                        {' '}
+                        <span className="block">Hundreds of </span>{' '}
+                        <span className="block">Classes</span>{' '}
                       </h2>
                       <div className="title-line-div">
                         <h4>30+ creators added weekly</h4>
@@ -33,20 +36,19 @@ function HundredsOfClasses() {
 
                       <div className="desc-div">
                         <p>
-                          Donec sollicitudin molestie malesuada. Praesent sapien
-                          massa, convallis a pellentesque nec, pura egestas non
-                          nisi. Curabitur aliquet quam id dui posuere
-                          blandit.Donec sollicitudin molestie khet malesuada
-                          Praesent sapien massa.
+                          Donec sollicitudin molestie malesuada. Praesent sapien massa, convallis a
+                          pellentesque nec, pura egestas non nisi. Curabitur aliquet quam id dui
+                          posuere blandit.Donec sollicitudin molestie khet malesuada Praesent sapien
+                          massa.
                         </p>
                       </div>
                       <div className="button-group-div">
-                        <a
-                          href="#"
+                        <Link
+                          to={authToken ? '/user-home' : '/login'}
                           className="btn btn-primary-outline btn-primary-outline-big"
                         >
                           <span className="text">Start Watching</span>
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -55,11 +57,7 @@ function HundredsOfClasses() {
                 <div className="col-lg-7 col-md-6 order-lg-1">
                   <div className="img-thumb-div m-none blur-bg">
                     <div className="img-thumb-inner">
-                      <img
-                        src={ClassesGraphic}
-                        className="img-fluid img-responsive"
-                        alt="img"
-                      />
+                      <img src={ClassesGraphic} className="img-fluid img-responsive" alt="img" />
                     </div>
                   </div>
                 </div>

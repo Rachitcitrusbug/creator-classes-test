@@ -1,27 +1,52 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import Select from "react-select";
-// import OwlCarousel from "react-owl-carousel";
-// import "owl.carousel/dist/assets/owl.carousel.css";
-// import "owl.carousel/dist/assets/owl.theme.default.css";
-import LiveCardImg from "../../assets/images/live-card/img.png";
-import LiveCardImg1 from "../../assets/images/live-card/img-1.png";
-import LiveCardImg2 from "../../assets/images/live-card/img-2.png";
-import LiveCardImg3 from "../../assets/images/live-card/img-3.png";
-import Creator3 from "../../assets/images/creators/creators3.jpg";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Select from 'react-select';
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
+import { UserClasses } from '../../api/userClassesApi';
+import Profile from '../../assets/images/profile.png';
 
 const optionSelect = [
   { value: "I'm yet to think...", label: "I'm yet to think..." },
-  { value: "Option 2", label: "Option 2" },
-  { value: "Option 3", label: "Option 3" },
+  { value: 'Option 2', label: 'Option 2' },
+  { value: 'Option 3', label: 'Option 3' },
 ];
 
 function OurClasses() {
-  const history = useHistory();
-  const handleClassClick = (e) => {
-    e.preventDefault();
-    history.push("/class");
-  };
+  const [classData, setClassData] = useState([]);
+
+  useEffect(() => {
+    window.onload = () => {
+      try {
+        UserClasses().then((result) => {
+          if (result) {
+            switch (result.code) {
+              case 200:
+                if (result.status == true) {
+                  setClassData(result.data);
+                }
+                break;
+              case 400:
+                console.log('Bad request.');
+                break;
+              case 401:
+                console.log('Session Is Expired Please Login Again');
+                break;
+              case 500:
+                console.log('Server error.');
+                break;
+              default:
+                console.log(result.message);
+                break;
+            }
+          }
+        });
+      } catch (err) {
+        console.log('Something Went Wrong');
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -59,338 +84,90 @@ function OurClasses() {
               <div className="row">
                 <div className="col-lg-12 col-md-12">
                   <div className="owl-slider-new-main-slider">
-                    <div
-                      className="owl-carousel owl-theme our-classes-owl"
-                      id="our-classes-owl"
+                    <OwlCarousel
+                      className="owl-carousel owl-theme our-classes-owl owl-loaded owl-drag"
+                      loop
+                      margin={15}
+                      nav
                     >
-                      <div className="item">
-                        <div className="our-video-common-slider-box">
-                          <div className="our-video-img-thumb">
-                            <div className="img-thumb">
-                              {" "}
-                              <img
-                                src={LiveCardImg}
-                                className="img-fluid img-responsive"
-                                alt="image"
-                              />{" "}
-                            </div>
-                            <div className="like-box-abs">
-                              {" "}
-                              <button className="like-button">
-                                <span className="like-icon "> </span>
-                              </button>{" "}
-                            </div>
-                            <div className="time-box-abs">
-                              {" "}
-                              <button className="time-button">
-                                {" "}
-                                13:47{" "}
-                              </button>{" "}
-                            </div>
-                          </div>
-                          <div className="our-content-div">
-                            <div className="our-content-row">
-                              <div className="our-content-full">
-                                <h4>
-                                  <a href="" onClick={handleClassClick}>
-                                    How to learn photography in an efficient way
-                                  </a>{" "}
-                                </h4>
+                      {classData.map((obj, index) => (
+                        <div className="item" key={index}>
+                          <div className="our-video-common-slider-box">
+                            <div className="our-video-img-thumb">
+                              <div className="img-thumb">
+                                {' '}
+                                <img
+                                  key={index}
+                                  src={obj.thumbnail_file}
+                                  className="img-fluid img-responsive"
+                                  alt="image"
+                                />{' '}
                               </div>
+                              <div className="like-box-abs">
+                                {' '}
+                                <button className="like-button">
+                                  <span className="like-icon "> </span>
+                                </button>{' '}
+                              </div>
+                            </div>
+                            <div className="our-content-div">
+                              <div className="our-content-row">
+                                <div className="our-content-full">
+                                  <h4>
+                                    <Link to="/class">{obj.title}</Link>{' '}
+                                  </h4>
+                                </div>
 
-                              <div className="our-content-left">
-                                <div className="thumb-img">
-                                  <a href="#" className="link">
-                                    <img
-                                      src={Creator3}
-                                      className="img-fluid user"
-                                      alt="user"
-                                    />
-                                  </a>
+                                <div className="our-content-left">
+                                  <div className="thumb-img">
+                                    <Link to="/user-home" className="link">
+                                      <img
+                                        src={
+                                          obj.creator_profile_image == '' ||
+                                          obj.creator_profile_image == null ||
+                                          obj.creator_profile_image == undefined ||
+                                          obj.creator_profile_image ==
+                                            'https://myapp-user-uploads154822-dev.s3.amazonaws.com/sample.jpg'
+                                            ? Profile
+                                            : obj.creator_profile_image
+                                        }
+                                        className="img-fluid user"
+                                        alt="user"
+                                      />
+                                    </Link>
+                                  </div>
+                                </div>
+                                <div className="our-content-right">
+                                  <h3>
+                                    <Link to="/creator" className="link">
+                                      {obj.creator_name}{' '}
+                                      <span className="icon-rounded-span check-icon-rounded">
+                                        <span className="material-icons">done</span>
+                                      </span>{' '}
+                                    </Link>
+                                  </h3>
                                 </div>
                               </div>
-                              <div className="our-content-right">
-                                <h3>
-                                  <a href="#" className="link">
-                                    Mike Visuals{" "}
-                                    <span className="icon-rounded-span check-icon-rounded">
-                                      <span className="material-icons">
-                                        done
-                                      </span>
-                                    </span>{" "}
-                                  </a>
-                                </h3>
-                                <p>Visual Expert</p>
-                              </div>
-                            </div>
 
-                            <div className="our-content-bottom-row">
-                              <div className="our-content-bottom-left">
-                                <div className="label-div">
-                                  <span className="txt-label">Popular</span>
+                              <div className="our-content-bottom-row">
+                                <div className="our-content-bottom-right">
+                                  <h4>
+                                    <span className="material-icons">schedule</span>{' '}
+                                    <span className="txt">
+                                      Posted{' '}
+                                      {Math.floor(
+                                        (new Date() - Date.parse(obj.created_at)) / 86400000,
+                                      )}{' '}
+                                      days ago
+                                    </span>{' '}
+                                  </h4>
                                 </div>
-                              </div>
-                              <div className="our-content-bottom-right">
-                                <h4>
-                                  <span className="material-icons">
-                                    schedule
-                                  </span>{" "}
-                                  <span className="txt">
-                                    Posted 10 hours ago
-                                  </span>{" "}
-                                </h4>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-
-                      <div className="item">
-                        <div className="our-video-common-slider-box">
-                          <div className="our-video-img-thumb">
-                            <div className="img-thumb">
-                              {" "}
-                              <img
-                                src={LiveCardImg1}
-                                className="img-fluid img-responsive"
-                                alt="image"
-                              />{" "}
-                            </div>
-                            <div className="like-box-abs">
-                              {" "}
-                              <button className="like-button">
-                                <span className="like-icon "> </span>
-                              </button>{" "}
-                            </div>
-                            <div className="time-box-abs">
-                              {" "}
-                              <button className="time-button">
-                                {" "}
-                                13:47{" "}
-                              </button>{" "}
-                            </div>
-                          </div>
-                          <div className="our-content-div">
-                            <div className="our-content-row">
-                              <div className="our-content-full">
-                                <h4>
-                                  <a href="" onClick={handleClassClick}>
-                                    How to learn photography in an efficient way
-                                  </a>{" "}
-                                </h4>
-                              </div>
-
-                              <div className="our-content-left">
-                                <div className="thumb-img">
-                                  <a href="#" className="link">
-                                    <img
-                                      src={Creator3}
-                                      className="img-fluid user"
-                                      alt="user"
-                                    />
-                                  </a>
-                                </div>
-                              </div>
-                              <div className="our-content-right">
-                                <h3>
-                                  <a href="#" className="link">
-                                    Mike Visuals{" "}
-                                    <span className="icon-rounded-span check-icon-rounded">
-                                      <span className="material-icons">
-                                        done
-                                      </span>
-                                    </span>{" "}
-                                  </a>
-                                </h3>
-                                <p>Visual Expert</p>
-                              </div>
-                            </div>
-
-                            <div className="our-content-bottom-row">
-                              <div className="our-content-bottom-left">
-                                <div className="label-div">
-                                  <span className="txt-label">Popular</span>
-                                </div>
-                              </div>
-                              <div className="our-content-bottom-right">
-                                <h4>
-                                  <span className="material-icons">
-                                    schedule
-                                  </span>{" "}
-                                  <span className="txt">
-                                    Posted 10 hours ago
-                                  </span>{" "}
-                                </h4>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="item">
-                        <div className="our-video-common-slider-box">
-                          <div className="our-video-img-thumb">
-                            <div className="img-thumb">
-                              {" "}
-                              <img
-                                src={LiveCardImg2}
-                                className="img-fluid img-responsive"
-                                alt="image"
-                              />{" "}
-                            </div>
-                            <div className="like-box-abs">
-                              {" "}
-                              <button className="like-button">
-                                <span className="like-icon "> </span>
-                              </button>{" "}
-                            </div>
-                            <div className="time-box-abs">
-                              {" "}
-                              <button className="time-button">
-                                {" "}
-                                13:47{" "}
-                              </button>{" "}
-                            </div>
-                          </div>
-                          <div className="our-content-div">
-                            <div className="our-content-row">
-                              <div className="our-content-full">
-                                <h4>
-                                  <a href="" onClick={handleClassClick}>
-                                    How to learn photography in an efficient way
-                                  </a>{" "}
-                                </h4>
-                              </div>
-
-                              <div className="our-content-left">
-                                <div className="thumb-img">
-                                  <a href="#" className="link">
-                                    <img
-                                      src={Creator3}
-                                      className="img-fluid user"
-                                      alt="user"
-                                    />
-                                  </a>
-                                </div>
-                              </div>
-                              <div className="our-content-right">
-                                <h3>
-                                  <a href="#" className="link">
-                                    Mike Visuals{" "}
-                                    <span className="icon-rounded-span check-icon-rounded">
-                                      <span className="material-icons">
-                                        done
-                                      </span>
-                                    </span>{" "}
-                                  </a>
-                                </h3>
-                                <p>Visual Expert</p>
-                              </div>
-                            </div>
-
-                            <div className="our-content-bottom-row">
-                              <div className="our-content-bottom-left">
-                                <div className="label-div">
-                                  <span className="txt-label">Popular</span>
-                                </div>
-                              </div>
-                              <div className="our-content-bottom-right">
-                                <h4>
-                                  <span className="material-icons">
-                                    schedule
-                                  </span>{" "}
-                                  <span className="txt">
-                                    Posted 10 hours ago
-                                  </span>{" "}
-                                </h4>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="item">
-                        <div className="our-video-common-slider-box">
-                          <div className="our-video-img-thumb">
-                            <div className="img-thumb">
-                              {" "}
-                              <img
-                                src={LiveCardImg3}
-                                className="img-fluid img-responsive"
-                                alt="image"
-                              />{" "}
-                            </div>
-                            <div className="like-box-abs">
-                              {" "}
-                              <button className="like-button">
-                                <span className="like-icon "> </span>
-                              </button>{" "}
-                            </div>
-                            <div className="time-box-abs">
-                              {" "}
-                              <button className="time-button">
-                                {" "}
-                                13:47{" "}
-                              </button>{" "}
-                            </div>
-                          </div>
-                          <div className="our-content-div">
-                            <div className="our-content-row">
-                              <div className="our-content-full">
-                                <h4>
-                                  <a href="" onClick={handleClassClick}>
-                                    How to learn photography in an efficient way
-                                  </a>{" "}
-                                </h4>
-                              </div>
-
-                              <div className="our-content-left">
-                                <div className="thumb-img">
-                                  <a href="#" className="link">
-                                    <img
-                                      src={Creator3}
-                                      className="img-fluid user"
-                                      alt="user"
-                                    />
-                                  </a>
-                                </div>
-                              </div>
-                              <div className="our-content-right">
-                                <h3>
-                                  <a href="#" className="link">
-                                    Mike Visuals{" "}
-                                    <span className="icon-rounded-span check-icon-rounded">
-                                      <span className="material-icons">
-                                        done
-                                      </span>
-                                    </span>{" "}
-                                  </a>
-                                </h3>
-                                <p>Visual Expert</p>
-                              </div>
-                            </div>
-
-                            <div className="our-content-bottom-row">
-                              <div className="our-content-bottom-left">
-                                <div className="label-div">
-                                  <span className="txt-label">Popular</span>
-                                </div>
-                              </div>
-                              <div className="our-content-bottom-right">
-                                <h4>
-                                  <span className="material-icons">
-                                    schedule
-                                  </span>{" "}
-                                  <span className="txt">
-                                    Posted 10 hours ago
-                                  </span>{" "}
-                                </h4>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                      ))}
+                    </OwlCarousel>
                   </div>
                 </div>
               </div>

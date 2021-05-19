@@ -1,6 +1,9 @@
-import React from "react";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 function CreativeCareer() {
+  const authToken = localStorage.getItem('token');
+
   return (
     <>
       <section className="creative-career-today-section">
@@ -14,15 +17,12 @@ function CreativeCareer() {
               </div>
               <div className="col-lg-4 col-md-4">
                 <div className="button-group-div">
-                  <a href="#" className="btn btn-primary-all">
-                    <span className="text">Get Started Now</span>{" "}
+                  <Link to={authToken ? '/user-home' : '/login'} className="btn btn-primary-all">
+                    <span className="text">Get Started Now</span>{' '}
                     <span className="span-rounded">
-                      <span className="material-icons">
-                        {" "}
-                        keyboard_arrow_right{" "}
-                      </span>
+                      <span className="material-icons"> keyboard_arrow_right </span>
                     </span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import Logo from "../../assets/images/white-icon-logo.svg";
-import Profile from "../../assets/images/profile.png";
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Logo from '../../assets/images/white-icon-logo.svg';
+import Profile from '../../assets/images/profile.png';
 
-function ClassHeader() {
+function UserHeader() {
+  const history = useHistory();
+  const authToken = localStorage.getItem('token');
+  const profile_image = useSelector((state) => state.profile_image);
+
   const [offset, setOffset] = useState(0);
-  const [className, setClassName] = useState(
-    "header-div no-collapse-header clearfix"
-  );
+  const [className, setClassName] = useState('header-div no-collapse-header clearfix');
 
   useEffect(() => {
     window.onscroll = () => {
@@ -17,18 +21,18 @@ function ClassHeader() {
 
   useEffect(() => {
     if (offset > 100) {
-      setClassName(
-        "header-div header-div2 clearfix header-bgcolor slideInDown animated"
-      );
+      setClassName('header-div header-div2 clearfix header-bgcolor slideInDown animated');
     } else {
-      setClassName("header-div header-div2 clearfix");
+      setClassName('header-div header-div2 clearfix');
     }
   });
 
-  const history = useHistory();
-  const handleLogoClick = (e) => {
-    e.preventDefault();
-    history.push("/");
+  const handleLogout = () => {
+    localStorage.clear();
+
+    setTimeout(() => {
+      history.push('/');
+    }, 1000);
   };
 
   return (
@@ -41,29 +45,21 @@ function ClassHeader() {
                 <div className="col-lg-12 col-md-12">
                   <div className="header-container">
                     <div className="logo-div">
-                      <a
-                        className="logo_link clearfix"
-                        href=""
-                        onClick={handleLogoClick}
-                      >
-                        <img
-                          src={Logo}
-                          className="img-fluid logo_img main-logo-icon"
-                          alt="logo"
-                        />
-                        <h1 class="text-logo">
-                          {" "}
-                          <span class="text-logo-span1">Creator</span>{" "}
-                          <span class="text-logo-span2">classes</span>
+                      <Link className="logo_link clearfix" to={authToken ? '/user-home' : '/'}>
+                        <img src={Logo} className="img-fluid logo_img main-logo-icon" alt="logo" />
+                        <h1 className="text-logo">
+                          {' '}
+                          <span className="text-logo-span1">Creator</span>{' '}
+                          <span className="text-logo-span2">classes</span>
                         </h1>
-                      </a>
+                      </Link>
                     </div>
 
                     <nav className="nav-center-div">
                       <div className="top-nav1">
                         <div className="cd-shadow-layer"></div>
                         <div className="nav-m-bar">
-                          <a
+                          <Link
                             onClick="openNav()"
                             className="opennav"
                             data-placement="bottom"
@@ -71,45 +67,41 @@ function ClassHeader() {
                             data-original-title="Menu"
                           >
                             <i className="menu-bars menu-icon"></i>
-                          </a>
+                          </Link>
                         </div>
 
                         <div className="nav-div clearfix" id="mySidenav">
-                          <a
-                            href="javascript:void(0)"
-                            className="closebtn"
-                            onclick="closeNav()"
-                          >
+                          <Link to="javascript:void(0)" className="closebtn" onClick="closeNav()">
                             &times;
-                          </a>
+                          </Link>
 
                           <div className="row-nav-div">
                             <div className="left-side">
                               <ul className="nav ullist-inline" id="nav-res">
                                 <li className="active">
-                                  <a href="" className="nav-link">
+                                  <Link to="" className="nav-link">
                                     Home
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="" className="nav-link">
+                                  <Link to="" className="nav-link">
                                     Live streams
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="" className="nav-link">
+                                  <Link to="" className="nav-link">
                                     Classes
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="" className="nav-link">
+                                  <Link to="" className="nav-link">
                                     Creators
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="" className="nav-link">
+                                  <Link to="" className="nav-link">
                                     Materials
-                                  </a>
+                                  </Link>
                                 </li>
                               </ul>
                             </div>
@@ -118,34 +110,29 @@ function ClassHeader() {
                               <div className="right-nf-icon-div">
                                 <div className="icon-row-nf">
                                   <div className="icon-box-nf">
-                                    <a href="" className="link">
-                                      {" "}
-                                      <span className="material-icons">
-                                        favorite
-                                      </span>{" "}
-                                    </a>
+                                    <Link to="" className="link">
+                                      {' '}
+                                      <span className="material-icons">favorite</span>{' '}
+                                    </Link>
                                   </div>
                                   <div className="icon-box-nf">
-                                    <a
-                                      href=""
+                                    <Link
+                                      to=""
                                       className="link"
                                       data-toggle="modal"
                                       data-target="#notifications-modal"
                                     >
-                                      {" "}
-                                      <span className="material-icons">
-                                        notifications
-                                      </span>{" "}
-                                      <span className="text-count-n">1</span>{" "}
-                                    </a>
+                                      {' '}
+                                      <span className="material-icons">notifications</span>{' '}
+                                      <span className="text-count-n">1</span>{' '}
+                                    </Link>
                                   </div>
                                 </div>
                               </div>
                               <div className="user-drop-down">
                                 <div className="dropdown drop-left dropdown-custom-top">
-                                  <a
+                                  <Link
                                     className="btn btn-default dropdown-toggle"
-                                    href=""
                                     role="button"
                                     id="dropdownMenuLink"
                                     data-toggle="dropdown"
@@ -155,31 +142,36 @@ function ClassHeader() {
                                     <div className="user-profile">
                                       <div className="user-img">
                                         <img
-                                          src={Profile}
+                                          src={
+                                            profile_image == '' ||
+                                            profile_image == null ||
+                                            profile_image == undefined ||
+                                            profile_image ==
+                                              'https://myapp-user-uploads154822-dev.s3.amazonaws.com/sample.jpg'
+                                              ? Profile
+                                              : profile_image
+                                          }
                                           className="user-top-image"
                                           alt="user image"
                                         />
                                       </div>
                                     </div>
-                                  </a>
-                                  <div
-                                    className="dropdown-menu"
-                                    aria-labelledby="dropdownMenuLink"
-                                  >
+                                  </Link>
+                                  <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <ul>
                                       <li>
-                                        <a className="dropdown-item" href="">
-                                          {" "}
-                                          <span className="bg-custom-icon user-icon"></span>{" "}
-                                          Profile Settings
-                                        </a>
+                                        <Link className="dropdown-item" to="">
+                                          {' '}
+                                          <span className="bg-custom-icon user-icon"></span> Profile
+                                          Settings
+                                        </Link>
                                       </li>
                                       <li className="logout-li">
-                                        <a className="dropdown-item" href="">
-                                          {" "}
-                                          <span className="bg-custom-icon logout-icon"></span>{" "}
+                                        <Link className="dropdown-item" onClick={handleLogout}>
+                                          {' '}
+                                          <span className="bg-custom-icon logout-icon"></span>{' '}
                                           Logout
-                                        </a>
+                                        </Link>
                                       </li>
                                     </ul>
                                   </div>
@@ -201,4 +193,8 @@ function ClassHeader() {
   );
 }
 
-export default ClassHeader;
+export default UserHeader;
+
+UserHeader.propTypes = {
+  image: PropTypes.any,
+};

@@ -1,12 +1,65 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import AuthLeftBanner from "./AuthLeftBanner";
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { UserForgotPassword } from '../../api/userForgotPasswordApi';
+import AuthLeftBanner from './AuthLeftBanner';
 
 function ForgotPassword() {
   const history = useHistory();
-  const handleSignupClick = (e) => {
+  const [email, setEmail] = useState('');
+  const [emailErr, setEmailErr] = useState({});
+
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    history.push("/signup");
+
+    const isValid = formValidation();
+    if (isValid) {
+      setEmail('');
+
+      const forgotPasswordData = {
+        email: email,
+      };
+
+      try {
+        UserForgotPassword(forgotPasswordData).then((result) => {
+          if (result) {
+            switch (result.code) {
+              case 200:
+                if (result.status == true) {
+                  history.push('/login');
+                }
+                break;
+              case 400:
+                console.log('Bad request.');
+                break;
+              case 401:
+                console.log('Session Is Expired Please Login Again');
+                break;
+              case 500:
+                console.log('Server error.');
+                break;
+              default:
+                console.log(result.message);
+                break;
+            }
+          }
+        });
+      } catch (err) {
+        console.log('Something Went Wrong');
+      }
+    }
+  };
+
+  const formValidation = () => {
+    const emailErr = {};
+    let isValid = true;
+
+    if (email.trim().length === 0) {
+      emailErr.emailRequired = 'Email is required!';
+      isValid = false;
+    }
+
+    setEmailErr(emailErr);
+    return isValid;
   };
 
   return (
@@ -36,24 +89,33 @@ function ForgotPassword() {
                                       <div className="col-xl-12 col-lg-12 col-md-12 plr-8">
                                         <div className="message-info-div">
                                           <p>
-                                            Enter your email address below and
-                                            we'll get you back on track.
+                                            Enter your email address below and we&apos;ll get you
+                                            back on track.
                                           </p>
                                         </div>
                                       </div>
 
                                       <div className="col-xl-12 col-lg-12 col-md-12 plr-8">
                                         <div className="form-group mb-30">
-                                          <label className="label-text">
-                                            Username or email
-                                          </label>
+                                          <label className="label-text">Email</label>
                                           <div className="form-group-control">
                                             <input
-                                              type="text"
+                                              type="email"
                                               className="form-control"
                                               placeholder=""
+                                              value={email}
+                                              onChange={(e) => {
+                                                setEmail(e.target.value);
+                                              }}
                                             />
                                           </div>
+                                          {Object.keys(emailErr).map((key, index) => {
+                                            return (
+                                              <span key={index} style={{ color: 'red' }}>
+                                                {emailErr[key]}
+                                              </span>
+                                            );
+                                          })}
                                           <div className="invalid-feedback">
                                             This field is required
                                           </div>
@@ -66,6 +128,7 @@ function ForgotPassword() {
                                             <button
                                               type="button"
                                               className="btn btn-common-primary mh-btn55 btn-reset-password disabled"
+                                              onClick={handleFormSubmit}
                                             >
                                               Reset Password
                                             </button>
@@ -85,27 +148,20 @@ function ForgotPassword() {
                                     <div className="bottom-left-bx">
                                       <div className="link-box text-center-reg-side">
                                         <p>
-                                          Are you a instructor{" "}
-                                          <a
-                                            href=""
-                                            className="btn btn-link btn-red-link"
-                                          >
+                                          Are you a instructor{' '}
+                                          <Link to="/" className="btn btn-link btn-red-link">
                                             Login here
-                                          </a>
+                                          </Link>
                                         </p>
                                       </div>
                                     </div>
                                     <div className="bottom-right-bx">
                                       <div className="link-box text-center-reg-side">
                                         <p>
-                                          Already have an account{" "}
-                                          <a
-                                            href=""
-                                            className="btn btn-link btn-red-link"
-                                            onClick={handleSignupClick}
-                                          >
+                                          Already have an account{' '}
+                                          <Link to="/signup" className="btn btn-link btn-red-link">
                                             Signup
-                                          </a>
+                                          </Link>
                                         </p>
                                       </div>
                                     </div>

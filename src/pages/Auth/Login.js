@@ -1,17 +1,91 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import AuthLeftBanner from "./AuthLeftBanner";
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Link, useHistory } from 'react-router-dom';
+import { UserLogin } from '../../api/userLoginApi';
+import { userData } from '../../redux/Actions/UserDataAction';
+import AuthLeftBanner from './AuthLeftBanner';
 
-function Login() {
+function Login(props) {
   const history = useHistory();
-  const handleSignupClick = (e) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailErr, setEmailErr] = useState({});
+  const [passwordErr, setPasswordErr] = useState({});
+
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    history.push("/signup");
+
+    const isValid = formValidation();
+    if (isValid) {
+      setEmail('');
+      setPassword('');
+
+      const loginData = {
+        email_or_username: email,
+        password: password,
+      };
+
+      try {
+        UserLogin(loginData).then((result) => {
+          if (result) {
+            switch (result.code) {
+              case 200:
+                if (result.status == true) {
+                  const data = {
+                    email: result.data.email,
+                    username: result.data.username,
+                    profile_image: result.data.profile_image,
+                  };
+                  props.userData(data);
+                  localStorage.setItem('token', result.data.token);
+                  history.push('/user-home', { user: result.data });
+                }
+                break;
+              case 400:
+                console.log('Bad request.');
+                break;
+              case 401:
+                console.log('Session Is Expired Please Login Again');
+                break;
+              case 500:
+                console.log('Server error.');
+                break;
+              default:
+                console.log(result.message);
+                break;
+            }
+          }
+        });
+      } catch (err) {
+        console.log('Something Went Wrong');
+      }
+    }
   };
 
-  const handleForgotPasswordClick = (e) => {
-    e.preventDefault();
-    history.push("/forgot-password");
+  const formValidation = () => {
+    const emailErr = {};
+    const passwordErr = {};
+    let isValid = true;
+
+    if (email.trim().length === 0) {
+      emailErr.emailRequired = 'Email is required!';
+      isValid = false;
+    }
+
+    if (password.trim().length < 6) {
+      passwordErr.passwordShort = 'Password is too short!';
+      isValid = false;
+    }
+
+    if (password.trim().length > 12) {
+      passwordErr.passwordLong = 'Password is too long!';
+      isValid = false;
+    }
+
+    setEmailErr(emailErr);
+    setPasswordErr(passwordErr);
+    return isValid;
   };
 
   return (
@@ -41,49 +115,43 @@ function Login() {
                                         <div className="social-button-div">
                                           <div className="sb-div-row">
                                             <div className="sb-div">
-                                              <a
-                                                href=""
+                                              <Link
+                                                to="/login"
                                                 className="btn btn-blck-sb btn-blck-sb-full google-btn"
                                               >
                                                 <span className="img-icon">
-                                                  {" "}
-                                                  <span className="bg-custom-icon google-icon"></span>{" "}
+                                                  {' '}
+                                                  <span className="bg-custom-icon google-icon"></span>{' '}
                                                 </span>
                                                 <span className="text-div">
-                                                  {" "}
-                                                  Login with Google{" "}
+                                                  {' '}
+                                                  Login with Google{' '}
                                                 </span>
-                                              </a>
+                                              </Link>
                                             </div>
                                             <div className="sb-div">
-                                              <a
-                                                href=""
+                                              <Link
+                                                to="/login"
                                                 className="btn btn-blck-sb btn-blck-sb-full facebook-btn"
                                               >
                                                 <span className="img-icon">
-                                                  {" "}
-                                                  <span className="bg-custom-icon facebook-icon"></span>{" "}
+                                                  {' '}
+                                                  <span className="bg-custom-icon facebook-icon"></span>{' '}
                                                 </span>
-                                                <span className="text-div">
-                                                  {" "}
-                                                  Facebook{" "}
-                                                </span>
-                                              </a>
+                                                <span className="text-div"> Facebook </span>
+                                              </Link>
                                             </div>
                                             <div className="sb-div">
-                                              <a
-                                                href=""
+                                              <Link
+                                                to="/login"
                                                 className="btn btn-blck-sb btn-blck-sb-full twitter-btn"
                                               >
                                                 <span className="img-icon">
-                                                  {" "}
-                                                  <span className="bg-custom-icon twitter-icon"></span>{" "}
+                                                  {' '}
+                                                  <span className="bg-custom-icon twitter-icon"></span>{' '}
                                                 </span>
-                                                <span className="text-div">
-                                                  {" "}
-                                                  Twitter{" "}
-                                                </span>
-                                              </a>
+                                                <span className="text-div"> Twitter </span>
+                                              </Link>
                                             </div>
                                           </div>
                                         </div>
@@ -97,16 +165,25 @@ function Login() {
 
                                       <div className="col-xl-12 col-lg-12 col-md-12 plr-8">
                                         <div className="form-group mb-30">
-                                          <label className="label-text">
-                                            Username or email
-                                          </label>
+                                          <label className="label-text">Username or email</label>
                                           <div className="form-group-control">
                                             <input
                                               type="text"
                                               className="form-control"
                                               placeholder=""
+                                              value={email}
+                                              onChange={(e) => {
+                                                setEmail(e.target.value);
+                                              }}
                                             />
                                           </div>
+                                          {Object.keys(emailErr).map((key, index) => {
+                                            return (
+                                              <span key={index} style={{ color: 'red' }}>
+                                                {emailErr[key]}
+                                              </span>
+                                            );
+                                          })}
                                           <div className="invalid-feedback">
                                             This field is required
                                           </div>
@@ -115,15 +192,17 @@ function Login() {
 
                                       <div className="col-xl-12 col-lg-12 col-md-12 plr-8">
                                         <div className="form-group mb-30">
-                                          <label className="label-text">
-                                            Password
-                                          </label>
+                                          <label className="label-text">Password</label>
                                           <div className="form-group-control pass-form-group-control">
                                             <input
                                               type="password"
                                               id="password1"
                                               className="form-control"
                                               placeholder=""
+                                              value={password}
+                                              onChange={(e) => {
+                                                setPassword(e.target.value);
+                                              }}
                                             />
                                             <span className="icon-group pass-icon-group">
                                               <button
@@ -133,16 +212,20 @@ function Login() {
                                                 className="pass-hide password-view-click"
                                               >
                                                 <span className="pass-custom-icon material-icons">
-                                                  {" "}
-                                                  visibility{" "}
+                                                  {' '}
+                                                  visibility{' '}
                                                 </span>
                                               </button>
                                             </span>
                                           </div>
-
-                                          <div className="invalid-feedback">
-                                            Incorrect password
-                                          </div>
+                                          {Object.keys(passwordErr).map((key, index) => {
+                                            return (
+                                              <span key={index} style={{ color: 'red' }}>
+                                                {passwordErr[key]}
+                                              </span>
+                                            );
+                                          })}
+                                          <div className="invalid-feedback">Incorrect password</div>
                                         </div>
                                       </div>
 
@@ -156,7 +239,7 @@ function Login() {
                                           />
                                           <label
                                             className="custom-control-label"
-                                            for="remember-me-card"
+                                            htmlFor="remember-me-card"
                                           >
                                             Remember me
                                           </label>
@@ -169,20 +252,18 @@ function Login() {
                                             <button
                                               type="button"
                                               className="btn btn-common-primary mh-btn55 btn-login disabled"
+                                              onClick={handleFormSubmit}
                                             >
                                               Log in
                                             </button>
                                           </div>
                                           <div className="general-form-right-btn">
-                                            <a
-                                              href=""
+                                            <Link
+                                              to="/forgot-password"
                                               className="link link-primary-auth"
-                                              onClick={
-                                                handleForgotPasswordClick
-                                              }
                                             >
-                                              Forgot your password?{" "}
-                                            </a>
+                                              Forgot your password?{' '}
+                                            </Link>
                                           </div>
                                         </div>
                                       </div>
@@ -199,27 +280,20 @@ function Login() {
                                     <div className="bottom-left-bx">
                                       <div className="link-box text-center-reg-side">
                                         <p>
-                                          Are you a instructor{" "}
-                                          <a
-                                            href=""
-                                            className="btn btn-link btn-red-link"
-                                          >
+                                          Are you a instructor{' '}
+                                          <Link to="/" className="btn btn-link btn-red-link">
                                             Login here
-                                          </a>
+                                          </Link>
                                         </p>
                                       </div>
                                     </div>
                                     <div className="bottom-right-bx">
                                       <div className="link-box text-center-reg-side">
                                         <p>
-                                          Don't have an account?{" "}
-                                          <a
-                                            href=""
-                                            className="btn btn-link btn-red-link"
-                                            onClick={handleSignupClick}
-                                          >
+                                          Don&apos;t have an account?{' '}
+                                          <Link to="/signup" className="btn btn-link btn-red-link">
                                             Signup
-                                          </a>
+                                          </Link>
                                         </p>
                                       </div>
                                     </div>
@@ -242,4 +316,22 @@ function Login() {
   );
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+  return {
+    email: state.email,
+    username: state.username,
+    profile_image: state.profile_image,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    userData: (data) => dispatch(userData(data)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
+
+Login.propTypes = {
+  userData: PropTypes.object,
+};
