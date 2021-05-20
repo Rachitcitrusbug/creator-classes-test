@@ -352,7 +352,7 @@ function Signup() {
                                           <div className="general-form-right-btn">
                                             <p className="text-link">
                                               Are you a instructor{' '}
-                                              <Link to="/" className="link link-primary-auth">
+                                              <Link to="/signup" className="link link-primary-auth">
                                                 Sign up here{' '}
                                               </Link>
                                             </p>

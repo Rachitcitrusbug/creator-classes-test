@@ -1,15 +1,15 @@
-import React from "react";
-import Live1 from "../../assets/images/live-streams/ls-image-01.jpg";
-import Live2 from "../../assets/images/live-streams/ls-image-02.jpg";
-import Creator3 from "../../assets/images/creators/creators3.jpg";
+import React from 'react';
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
+import Live1 from '../../assets/images/live-streams/ls-image-01.jpg';
+import Live2 from '../../assets/images/live-streams/ls-image-02.jpg';
+import Creator3 from '../../assets/images/creators/creators3.jpg';
 
 function UpcomingLiveStream() {
   return (
     <>
-      <section
-        className="upcoming-live-streams-section"
-        id="upcoming-live-streams-section"
-      >
+      <section className="upcoming-live-streams-section" id="upcoming-live-streams-section">
         <div className="upcoming-live-streams-div">
           <div className="heading-div">
             <div className="container container-1000">
@@ -28,19 +28,41 @@ function UpcomingLiveStream() {
               <div className="row">
                 <div className="col-lg-12 col-md-12">
                   <div className="owl-slider-main-slider">
-                    <div
+                    <OwlCarousel
                       className="owl-carousel owl-theme upcoming-live-streams-owl"
                       id="upcoming-live-streams-owl"
+                      loop={true}
+                      items={1.3}
+                      margin={15}
+                      nav={false}
+                      dots={false}
+                      stagePadding={0}
+                      autoplay={true}
+                      smartSpeed={2000}
+                      responsiveClass={true}
+                      responsive={{
+                        0: {
+                          items: 2,
+                          autoplay: true,
+                          center: true,
+                          margin: 8,
+                        },
+                        600: {
+                          items: 2.3,
+                        },
+                        1200: {
+                          items: 1.3,
+                        },
+                        1600: {
+                          items: 4.8,
+                        },
+                      }}
                     >
                       <div className="item">
                         <div className="live-streams-img-slider-box">
                           <div className="live-streams-img-thumb">
                             <div className="img-thumb">
-                              <img
-                                src={Live1}
-                                className="img-fluid img-responsive"
-                                alt="image"
-                              />
+                              <img src={Live1} className="img-fluid img-responsive" alt="image" />
                             </div>
                             <div className="video-overlay-content-div">
                               <div className="video-overlay-content-row">
@@ -63,9 +85,9 @@ function UpcomingLiveStream() {
                                 <div className="video-overlay-content-right">
                                   <div className="sp-label-div">
                                     <a href="" className="link link-black-sp">
-                                      {" "}
-                                      <i className="bg-custom-icon video-camera-icon"></i>{" "}
-                                      Sneak Peek
+                                      {' '}
+                                      <i className="bg-custom-icon video-camera-icon"></i> Sneak
+                                      Peek
                                     </a>
                                   </div>
                                 </div>
@@ -86,9 +108,8 @@ function UpcomingLiveStream() {
                                   <div className="text-content-div">
                                     <h3>
                                       <a href="" className="link">
-                                        Vivamus suscipit tortor eget felis
-                                        porttitor volutpat Mauris blandit
-                                        aliquet elit
+                                        Vivamus suscipit tortor eget felis porttitor volutpat Mauris
+                                        blandit aliquet elit
                                       </a>
                                     </h3>
                                     <div className="other-info-row-div">
@@ -98,8 +119,7 @@ function UpcomingLiveStream() {
                                             <i className="bg-custom-icon calendar-time-icon"></i>
                                           </span>
                                           <span className="text">
-                                            Sept 12, 9:00 PM EST{" "}
-                                            <span className="dot-span">•</span>{" "}
+                                            Sept 12, 9:00 PM EST <span className="dot-span">•</span>{' '}
                                             <a href="" className="link">
                                               Michael Gray
                                             </a>
@@ -113,22 +133,19 @@ function UpcomingLiveStream() {
                               <div className="live-streams-content-right">
                                 <div className="book-button-div">
                                   <div className="btn-row">
-                                    {" "}
+                                    {' '}
                                     <a
                                       href=""
                                       className="btn btn-common-primary"
                                       data-toggle="modal"
                                       data-target="#login-to-book-modal"
                                     >
-                                      {" "}
-                                      <i className="bg-custom-icon invoice-icon"></i>{" "}
-                                      Book now{" "}
-                                    </a>{" "}
+                                      {' '}
+                                      <i className="bg-custom-icon invoice-icon"></i> Book now{' '}
+                                    </a>{' '}
                                   </div>
                                   <div className="text-center-row">
-                                    <p className="text-italic">
-                                      Hurry up! Only few seats are left
-                                    </p>
+                                    <p className="text-italic">Hurry up! Only few seats are left</p>
                                   </div>
                                 </div>
                               </div>
@@ -141,11 +158,7 @@ function UpcomingLiveStream() {
                         <div className="live-streams-img-slider-box">
                           <div className="live-streams-img-thumb">
                             <div className="img-thumb">
-                              <img
-                                src={Live2}
-                                className="img-fluid img-responsive"
-                                alt="image"
-                              />
+                              <img src={Live2} className="img-fluid img-responsive" alt="image" />
                             </div>
                             <div className="video-overlay-content-div">
                               <div className="video-overlay-content-row">
@@ -168,9 +181,9 @@ function UpcomingLiveStream() {
                                 <div className="video-overlay-content-right">
                                   <div className="sp-label-div">
                                     <a href="" className="link link-black-sp">
-                                      {" "}
-                                      <i className="bg-custom-icon video-camera-icon"></i>{" "}
-                                      Sneak Peek
+                                      {' '}
+                                      <i className="bg-custom-icon video-camera-icon"></i> Sneak
+                                      Peek
                                     </a>
                                   </div>
                                 </div>
@@ -182,19 +195,18 @@ function UpcomingLiveStream() {
                               <div className="live-streams-content-left">
                                 <div className="user-top-box">
                                   <div className="img-thumb">
-                                    {" "}
+                                    {' '}
                                     <img
                                       src={Creator3}
                                       className="img-fluid img-responsive"
                                       alt="testimonials"
-                                    />{" "}
+                                    />{' '}
                                   </div>
                                   <div className="text-content-div">
                                     <h3>
                                       <a href="" className="link">
-                                        Vivamus suscipit tortor eget felis
-                                        porttitor volutpat Mauris blandit
-                                        aliquet elit
+                                        Vivamus suscipit tortor eget felis porttitor volutpat Mauris
+                                        blandit aliquet elit
                                       </a>
                                     </h3>
                                     <div className="other-info-row-div">
@@ -204,8 +216,7 @@ function UpcomingLiveStream() {
                                             <i className="bg-custom-icon calendar-time-icon"></i>
                                           </span>
                                           <span className="text">
-                                            Sept 12, 9:00 PM EST{" "}
-                                            <span className="dot-span">•</span>{" "}
+                                            Sept 12, 9:00 PM EST <span className="dot-span">•</span>{' '}
                                             <a href="" className="link">
                                               Michael Gray
                                             </a>
@@ -219,22 +230,19 @@ function UpcomingLiveStream() {
                               <div className="live-streams-content-right">
                                 <div className="book-button-div">
                                   <div className="btn-row">
-                                    {" "}
+                                    {' '}
                                     <a
                                       href=""
                                       className="btn btn-common-primary"
                                       data-toggle="modal"
                                       data-target="#login-to-book-modal"
                                     >
-                                      {" "}
-                                      <i className="bg-custom-icon invoice-icon"></i>{" "}
-                                      Book now{" "}
-                                    </a>{" "}
+                                      {' '}
+                                      <i className="bg-custom-icon invoice-icon"></i> Book now{' '}
+                                    </a>{' '}
                                   </div>
                                   <div className="text-center-row">
-                                    <p className="text-italic">
-                                      Hurry up! Only few seats are left
-                                    </p>
+                                    <p className="text-italic">Hurry up! Only few seats are left</p>
                                   </div>
                                 </div>
                               </div>
@@ -242,7 +250,7 @@ function UpcomingLiveStream() {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </OwlCarousel>
                   </div>
                 </div>
               </div>

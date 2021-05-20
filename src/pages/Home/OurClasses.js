@@ -5,47 +5,95 @@ import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import { UserClasses } from '../../api/userClassesApi';
+import { UserClassFilterKeywords } from '../../api/userClassFilterKeywordsApi';
 import Profile from '../../assets/images/profile.png';
 
-const optionSelect = [
-  { value: "I'm yet to think...", label: "I'm yet to think..." },
-  { value: 'Option 2', label: 'Option 2' },
-  { value: 'Option 3', label: 'Option 3' },
-];
-
 function OurClasses() {
-  const [classData, setClassData] = useState([]);
+  const authToken = localStorage.getItem('token');
+  const [classData, setClassData] = useState(undefined);
+  const [keywordData, setKeywordData] = useState([]);
+  const [selectedOption, setSelectedOption] = useState('');
+
+  const handleOptionChange = (option) => {
+    setSelectedOption(option.value);
+  };
+
+  const getUserClasses = () => {
+    try {
+      UserClasses(selectedOption).then((result) => {
+        if (result) {
+          switch (result.code) {
+            case 200:
+              if (result.status == true) {
+                setClassData(result.data);
+              }
+              break;
+            case 400:
+              console.log('Bad request.');
+              break;
+            case 401:
+              console.log('Session Is Expired Please Login Again');
+              break;
+            case 500:
+              console.log('Server error.');
+              break;
+            default:
+              console.log(result.message);
+              break;
+          }
+        }
+      });
+    } catch (err) {
+      console.log('Something Went Wrong');
+    }
+  };
+
+  const getUserClassFilterKeywords = () => {
+    try {
+      UserClassFilterKeywords().then((result) => {
+        if (result) {
+          switch (result.code) {
+            case 200:
+              if (result.status == true) {
+                {
+                  let filterKeyword = [];
+                  result.data.length > 0 &&
+                    result.data.map((obj) =>
+                      filterKeyword.push({
+                        value: obj.id,
+                        label: obj.keyword,
+                      }),
+                    );
+                  setKeywordData(filterKeyword);
+                }
+              }
+              break;
+            case 400:
+              console.log('Bad request.');
+              break;
+            case 401:
+              console.log('Session Is Expired Please Login Again');
+              break;
+            case 500:
+              console.log('Server error.');
+              break;
+            default:
+              console.log(result.message);
+              break;
+          }
+        }
+      });
+    } catch (err) {
+      console.log('Something Went Wrong');
+    }
+  };
 
   useEffect(() => {
-    window.onload = () => {
-      try {
-        UserClasses().then((result) => {
-          if (result) {
-            switch (result.code) {
-              case 200:
-                if (result.status == true) {
-                  setClassData(result.data);
-                }
-                break;
-              case 400:
-                console.log('Bad request.');
-                break;
-              case 401:
-                console.log('Session Is Expired Please Login Again');
-                break;
-              case 500:
-                console.log('Server error.');
-                break;
-              default:
-                console.log(result.message);
-                break;
-            }
-          }
-        });
-      } catch (err) {
-        console.log('Something Went Wrong');
-      }
-    };
+    getUserClasses();
+  }, [selectedOption]);
+
+  useEffect(() => {
+    getUserClassFilterKeywords();
   }, []);
 
   return (
@@ -67,7 +115,8 @@ function OurClasses() {
                             <Select
                               className="js-select2"
                               id="select-filter"
-                              options={optionSelect}
+                              options={keywordData}
+                              onChange={handleOptionChange}
                             />
                           </div>
                         </div>
@@ -84,90 +133,119 @@ function OurClasses() {
               <div className="row">
                 <div className="col-lg-12 col-md-12">
                   <div className="owl-slider-new-main-slider">
-                    <OwlCarousel
-                      className="owl-carousel owl-theme our-classes-owl owl-loaded owl-drag"
-                      loop
-                      margin={15}
-                      nav
-                    >
-                      {classData.map((obj, index) => (
-                        <div className="item" key={index}>
-                          <div className="our-video-common-slider-box">
-                            <div className="our-video-img-thumb">
-                              <div className="img-thumb">
-                                {' '}
-                                <img
-                                  key={index}
-                                  src={obj.thumbnail_file}
-                                  className="img-fluid img-responsive"
-                                  alt="image"
-                                />{' '}
-                              </div>
-                              <div className="like-box-abs">
-                                {' '}
-                                <button className="like-button">
-                                  <span className="like-icon "> </span>
-                                </button>{' '}
-                              </div>
-                            </div>
-                            <div className="our-content-div">
-                              <div className="our-content-row">
-                                <div className="our-content-full">
-                                  <h4>
-                                    <Link to="/class">{obj.title}</Link>{' '}
-                                  </h4>
+                    {classData && classData.length > 0 && (
+                      <OwlCarousel
+                        className="owl-carousel owl-theme our-classes-owl"
+                        id="our-classes-owl"
+                        loop={classData.length >= 5 ? true : false}
+                        items={3.2}
+                        margin={15}
+                        nav={false}
+                        dots={false}
+                        stagePadding={0}
+                        autoplay={true}
+                        smartSpeed={2000}
+                        responsiveClass={true}
+                        responsive={{
+                          0: {
+                            items: 2,
+                            autoplay: true,
+                            center: true,
+                            margin: 8,
+                          },
+                          600: {
+                            items: 2.3,
+                          },
+                          1200: {
+                            items: 3.1,
+                          },
+                          1600: {
+                            items: 4.8,
+                          },
+                        }}
+                      >
+                        {classData.map((obj, index) => (
+                          <div className="item" key={index}>
+                            <div className="our-video-common-slider-box">
+                              <div className="our-video-img-thumb">
+                                <div className="img-thumb">
+                                  {' '}
+                                  <img
+                                    key={index}
+                                    src={obj.thumbnail_file}
+                                    className="img-fluid img-responsive"
+                                    alt="image"
+                                  />{' '}
                                 </div>
+                                <div className="like-box-abs">
+                                  {' '}
+                                  <button className="like-button">
+                                    <span className="like-icon "> </span>
+                                  </button>{' '}
+                                </div>
+                              </div>
+                              <div className="our-content-div">
+                                <div className="our-content-row">
+                                  <div className="our-content-full">
+                                    <h4>
+                                      <Link to={authToken ? '/class' : '/login'}>{obj.title}</Link>{' '}
+                                    </h4>
+                                  </div>
 
-                                <div className="our-content-left">
-                                  <div className="thumb-img">
-                                    <Link to="/user-home" className="link">
-                                      <img
-                                        src={
-                                          obj.creator_profile_image == '' ||
-                                          obj.creator_profile_image == null ||
-                                          obj.creator_profile_image == undefined ||
-                                          obj.creator_profile_image ==
-                                            'https://myapp-user-uploads154822-dev.s3.amazonaws.com/sample.jpg'
-                                            ? Profile
-                                            : obj.creator_profile_image
-                                        }
-                                        className="img-fluid user"
-                                        alt="user"
-                                      />
-                                    </Link>
+                                  <div className="our-content-left">
+                                    <div className="thumb-img">
+                                      <Link
+                                        to={authToken ? '/user-home' : '/login'}
+                                        className="link"
+                                      >
+                                        <img
+                                          src={
+                                            obj.creator_profile_image == '' ||
+                                            obj.creator_profile_image == null ||
+                                            obj.creator_profile_image == undefined ||
+                                            obj.creator_profile_image ==
+                                              'https://myapp-user-uploads154822-dev.s3.amazonaws.com/sample.jpg'
+                                              ? Profile
+                                              : obj.creator_profile_image
+                                          }
+                                          className="img-fluid user"
+                                          alt="user"
+                                        />
+                                      </Link>
+                                    </div>
+                                  </div>
+                                  <div className="our-content-right">
+                                    <h3>
+                                      <Link to={authToken ? '/creator' : '/login'} className="link">
+                                        {obj.creator_name}{' '}
+                                        <span className="icon-rounded-span check-icon-rounded">
+                                          <span className="material-icons">done</span>
+                                        </span>{' '}
+                                      </Link>
+                                    </h3>
                                   </div>
                                 </div>
-                                <div className="our-content-right">
-                                  <h3>
-                                    <Link to="/creator" className="link">
-                                      {obj.creator_name}{' '}
-                                      <span className="icon-rounded-span check-icon-rounded">
-                                        <span className="material-icons">done</span>
-                                      </span>{' '}
-                                    </Link>
-                                  </h3>
-                                </div>
-                              </div>
 
-                              <div className="our-content-bottom-row">
-                                <div className="our-content-bottom-right">
-                                  <h4>
-                                    <span className="material-icons">schedule</span>{' '}
-                                    <span className="txt">
-                                      Posted{' '}
-                                      {Math.floor(
-                                        (new Date() - Date.parse(obj.created_at)) / 86400000,
-                                      )}{' '}
-                                      days ago
-                                    </span>{' '}
-                                  </h4>
+                                <div className="our-content-bottom-row">
+                                  <div className="our-content-bottom-right">
+                                    <h4>
+                                      <span className="material-icons">schedule</span>{' '}
+                                      <span className="txt">
+                                        Posted{' '}
+                                        {Math.floor(
+                                          (new Date() - Date.parse(obj.created_at)) / 86400000,
+                                        )}{' '}
+                                        days ago
+                                      </span>{' '}
+                                    </h4>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </OwlCarousel>
+                        ))}
+                      </OwlCarousel>
+                    )}
                   </div>
                 </div>
               </div>

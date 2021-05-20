@@ -1,21 +1,80 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
+import { UserCreators } from '../../api/userCreatorsApi';
+import { CreatorProfileDetails } from '../../api/creatorProfileDetailsApi';
 import Creator1 from '../../assets/images/creators/creators1.jpg';
-import Creator2 from '../../assets/images/creators/creators2.jpg';
-import Creator3 from '../../assets/images/creators/creators3.jpg';
-import Creator4 from '../../assets/images/creators/creators4.jpg';
-import Creator5 from '../../assets/images/creators/creators5.jpg';
-import Creator6 from '../../assets/images/creators/creators6.jpg';
 
 function MeetTheCreators() {
   const history = useHistory();
-  const handleCreatorClick = (e) => {
-    e.preventDefault();
-    history.push('/creator');
+  // const authToken = localStorage.getItem('token');
+  const [creatorData, setCreatorData] = useState([]);
+
+  const getUserCreators = () => {
+    try {
+      UserCreators().then((result) => {
+        if (result) {
+          switch (result.code) {
+            case 200:
+              if (result.status == true) {
+                setCreatorData(result.data);
+              }
+              break;
+            case 400:
+              console.log('Bad request.');
+              break;
+            case 401:
+              console.log('Session Is Expired Please Login Again');
+              break;
+            case 500:
+              console.log('Server error.');
+              break;
+            default:
+              console.log(result.message);
+              break;
+          }
+        }
+      });
+    } catch (err) {
+      console.log('Something Went Wrong');
+    }
   };
+
+  useEffect(() => {
+    getUserCreators();
+  }, []);
+
+  function handleCreatorDetails(id) {
+    try {
+      CreatorProfileDetails(id).then((result) => {
+        if (result) {
+          switch (result.code) {
+            case 200:
+              if (result.status == true) {
+                history.push('/creator', { creator: result.data });
+              }
+              break;
+            case 400:
+              console.log('Bad request.');
+              break;
+            case 401:
+              console.log('Session Is Expired Please Login Again');
+              break;
+            case 500:
+              console.log('Server error.');
+              break;
+            default:
+              console.log(result.message);
+              break;
+          }
+        }
+      });
+    } catch (err) {
+      console.log('Something Went Wrong');
+    }
+  }
 
   return (
     <>
@@ -38,199 +97,88 @@ function MeetTheCreators() {
               <div className="row">
                 <div className="col-lg-12 col-md-12">
                   <div className="creators-owl-slider-main-slider">
-                    <OwlCarousel
-                      className="owl-carousel owl-theme meet-the-creators-owl-div owl-loaded owl-drag"
-                      id="meet-the-creators-owl"
-                      loop
-                      margin={15}
-                      nav
-                    >
-                      <div className="item">
-                        <div className="creators-img-mask-slider-box">
-                          <a href="#" className="creators-img-link" onClick={handleCreatorClick}>
-                            <div className="creators-img-mask-thumb">
-                              <div className="img-thumb">
-                                {' '}
-                                <img
-                                  src={Creator1}
-                                  className="img-fluid img-responsive"
-                                  alt="image"
-                                />{' '}
-                              </div>
-                              <div className="view-details-text">
-                                {' '}
-                                <p>
-                                  <span className="block">View </span>{' '}
-                                  <span className="block">Details</span>
-                                </p>{' '}
-                              </div>
-                            </div>
-                          </a>
-                          <div className="creators-content-div">
-                            <h3>
-                              <a href="#" className="link">
-                                Benn Tkalcevic
-                              </a>
-                            </h3>
-                            <h4>Photographer</h4>
-                          </div>
-                        </div>
-
-                        <div className="creators-img-mask-slider-box">
-                          <a href="#" className="creators-img-link" onClick={handleCreatorClick}>
-                            <div className="creators-img-mask-thumb">
-                              <div className="img-thumb">
-                                {' '}
-                                <img
-                                  src={Creator2}
-                                  className="img-fluid img-responsive"
-                                  alt="image"
-                                />{' '}
-                              </div>
-                              <div className="view-details-text">
-                                {' '}
-                                <p>
-                                  <span className="block">View </span>{' '}
-                                  <span className="block">Details</span>
-                                </p>{' '}
-                              </div>
-                            </div>
-                          </a>
-                          <div className="creators-content-div">
-                            <h3>
-                              <a href="#" className="link">
-                                Mitchell Mullins
-                              </a>
-                            </h3>
-                            <h4>Photographer</h4>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="item">
-                        <div className="creators-img-mask-slider-box">
-                          <a href="#" className="creators-img-link" onClick={handleCreatorClick}>
-                            <div className="creators-img-mask-thumb">
-                              <div className="img-thumb">
-                                {' '}
-                                <img
-                                  src={Creator3}
-                                  className="img-fluid img-responsive"
-                                  alt="image"
-                                />{' '}
-                              </div>
-                              <div className="view-details-text">
-                                {' '}
-                                <p>
-                                  <span className="block">View </span>{' '}
-                                  <span className="block">Details</span>
-                                </p>{' '}
+                    {creatorData.length > 0 && (
+                      <OwlCarousel
+                        className="owl-carousel owl-theme meet-the-creators-owl-div"
+                        id="meet-the-creators-owl"
+                        loop={creatorData.length >= 5 ? true : false}
+                        items={3.2}
+                        margin={15}
+                        nav={false}
+                        dots={false}
+                        stagePadding={0}
+                        autoplay={true}
+                        smartSpeed={2000}
+                        responsiveClass={true}
+                        responsive={{
+                          0: {
+                            items: 2,
+                            autoplay: true,
+                            center: true,
+                            margin: 8,
+                          },
+                          600: {
+                            items: 2.3,
+                          },
+                          1200: {
+                            items: 3.1,
+                          },
+                          1600: {
+                            items: 4.8,
+                          },
+                        }}
+                      >
+                        {creatorData.map((obj, index) => (
+                          <div className="item" key={index}>
+                            <div className="creators-img-mask-slider-box">
+                              <Link
+                                // to={authToken ? '/creator' : '/login'}
+                                className="creators-img-link"
+                                onClick={() => handleCreatorDetails(obj.id)}
+                              >
+                                <div className="creators-img-mask-thumb">
+                                  <div className="img-thumb">
+                                    {' '}
+                                    <img
+                                      src={
+                                        obj.profile_image == '' ||
+                                        obj.profile_image == null ||
+                                        obj.profile_image == undefined ||
+                                        obj.profile_image ==
+                                          'https://myapp-user-uploads154822-dev.s3.amazonaws.com/sample.jpg'
+                                          ? Creator1
+                                          : obj.profile_image
+                                      }
+                                      className="img-fluid img-responsive"
+                                      alt="image"
+                                    />{' '}
+                                  </div>
+                                  <div className="view-details-text">
+                                    {' '}
+                                    <p>
+                                      <span className="block">View </span>{' '}
+                                      <span className="block">Details</span>
+                                    </p>{' '}
+                                  </div>
+                                </div>
+                              </Link>
+                              <div className="creators-content-div">
+                                <h3>
+                                  <Link
+                                    // to={authToken ? '/creator' : '/login'}
+                                    className="link"
+                                    onClick={() => handleCreatorDetails(obj.id)}
+                                  >
+                                    {obj.full_name}
+                                  </Link>
+                                </h3>
+                                <h4>{obj.key_skill}</h4>
                               </div>
                             </div>
-                          </a>
-                          <div className="creators-content-div">
-                            <h3>
-                              <a href="#" className="link">
-                                Michael Gray
-                              </a>
-                            </h3>
-                            <h4>Photographer</h4>
                           </div>
-                        </div>
-
-                        <div className="creators-img-mask-slider-box">
-                          <a href="#" className="creators-img-link" onClick={handleCreatorClick}>
-                            <div className="creators-img-mask-thumb">
-                              <div className="img-thumb">
-                                {' '}
-                                <img
-                                  src={Creator4}
-                                  className="img-fluid img-responsive"
-                                  alt="image"
-                                />{' '}
-                              </div>
-                              <div className="view-details-text">
-                                {' '}
-                                <p>
-                                  <span className="block">View </span>{' '}
-                                  <span className="block">Details</span>
-                                </p>{' '}
-                              </div>
-                            </div>
-                          </a>
-                          <div className="creators-content-div">
-                            <h3>
-                              <a href="#" className="link">
-                                Nolan Omura
-                              </a>
-                            </h3>
-                            <h4>Photographer</h4>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="item">
-                        <div className="creators-img-mask-slider-box">
-                          <a href="#" className="creators-img-link" onClick={handleCreatorClick}>
-                            <div className="creators-img-mask-thumb">
-                              <div className="img-thumb">
-                                {' '}
-                                <img
-                                  src={Creator5}
-                                  className="img-fluid img-responsive"
-                                  alt="image"
-                                />{' '}
-                              </div>
-                              <div className="view-details-text">
-                                {' '}
-                                <p>
-                                  <span className="block">View </span>{' '}
-                                  <span className="block">Details</span>
-                                </p>{' '}
-                              </div>
-                            </div>
-                          </a>
-                          <div className="creators-content-div">
-                            <h3>
-                              <a href="#" className="link">
-                                Keenan Lam
-                              </a>
-                            </h3>
-                            <h4>Photographer</h4>
-                          </div>
-                        </div>
-
-                        <div className="creators-img-mask-slider-box">
-                          <a href="#" className="creators-img-link" onClick={handleCreatorClick}>
-                            <div className="creators-img-mask-thumb">
-                              <div className="img-thumb">
-                                {' '}
-                                <img
-                                  src={Creator6}
-                                  className="img-fluid img-responsive"
-                                  alt="image"
-                                />{' '}
-                              </div>
-                              <div className="view-details-text">
-                                {' '}
-                                <p>
-                                  <span className="block">View </span>{' '}
-                                  <span className="block">Details</span>
-                                </p>{' '}
-                              </div>
-                            </div>
-                          </a>
-                          <div className="creators-content-div">
-                            <h3>
-                              <a href="#" className="link">
-                                Malthe Zimakoff
-                              </a>
-                            </h3>
-                            <h4>Photographer</h4>
-                          </div>
-                        </div>
-                      </div>
-                    </OwlCarousel>
+                        ))}
+                      </OwlCarousel>
+                    )}
                   </div>
                 </div>
               </div>

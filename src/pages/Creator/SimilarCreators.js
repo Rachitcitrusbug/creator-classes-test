@@ -1,15 +1,15 @@
-import React from "react";
-import Creator1 from "../../assets/images/creators/creators1.jpg";
-import Creator2 from "../../assets/images/creators/creators2.jpg";
-import Creator4 from "../../assets/images/creators/creators4.jpg";
+import React from 'react';
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
+import Creator1 from '../../assets/images/creators/creators1.jpg';
+import Creator2 from '../../assets/images/creators/creators2.jpg';
+import Creator4 from '../../assets/images/creators/creators4.jpg';
 
 function SimilarCreators() {
   return (
     <>
-      <section
-        className="similar-creators-section"
-        id="similar-creators-section"
-      >
+      <section className="similar-creators-section" id="similar-creators-section">
         <div className="similar-creators-div">
           <div className="heading-div">
             <div className="container container-1000">
@@ -28,21 +28,47 @@ function SimilarCreators() {
               <div className="row">
                 <div className="col-lg-12 col-md-12">
                   <div className="similar-creators-slider">
-                    <div
+                    <OwlCarousel
                       className="owl-carousel owl-theme similar-creators-owl-div"
                       id="similar-creators-owl"
+                      loop={true}
+                      items={3.1}
+                      margin={15}
+                      nav={false}
+                      dots={false}
+                      stagePadding={0}
+                      autoplay={true}
+                      smartSpeed={2000}
+                      responsiveClass={true}
+                      responsive={{
+                        0: {
+                          items: 2,
+                          autoplay: true,
+                          center: true,
+                          margin: 8,
+                        },
+                        600: {
+                          items: 2.3,
+                        },
+                        1200: {
+                          items: 3.0,
+                        },
+                        1600: {
+                          items: 4.8,
+                        },
+                      }}
                     >
                       <div className="item">
                         <div className="similar-creators-slider-box">
                           <a href="" className="creators-img-link">
                             <div className="creators-img-mask-thumb">
                               <div className="img-thumb">
-                                {" "}
+                                {' '}
                                 <img
                                   src={Creator2}
                                   className="img-fluid img-responsive"
                                   alt="image"
-                                />{" "}
+                                />{' '}
                               </div>
                             </div>
                           </a>
@@ -96,12 +122,12 @@ function SimilarCreators() {
                           <a href="" className="creators-img-link">
                             <div className="creators-img-mask-thumb">
                               <div className="img-thumb">
-                                {" "}
+                                {' '}
                                 <img
                                   src={Creator4}
                                   className="img-fluid img-responsive"
                                   alt="image"
-                                />{" "}
+                                />{' '}
                               </div>
                             </div>
                           </a>
@@ -155,12 +181,12 @@ function SimilarCreators() {
                           <a href="" className="creators-img-link">
                             <div className="creators-img-mask-thumb">
                               <div className="img-thumb">
-                                {" "}
+                                {' '}
                                 <img
                                   src={Creator1}
                                   className="img-fluid img-responsive"
                                   alt="image"
-                                />{" "}
+                                />{' '}
                               </div>
                             </div>
                           </a>
@@ -208,7 +234,7 @@ function SimilarCreators() {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </OwlCarousel>
                   </div>
                 </div>
               </div>

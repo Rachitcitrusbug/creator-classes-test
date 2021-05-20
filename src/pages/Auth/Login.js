@@ -281,7 +281,7 @@ function Login(props) {
                                       <div className="link-box text-center-reg-side">
                                         <p>
                                           Are you a instructor{' '}
-                                          <Link to="/" className="btn btn-link btn-red-link">
+                                          <Link to="/login" className="btn btn-link btn-red-link">
                                             Login here
                                           </Link>
                                         </p>

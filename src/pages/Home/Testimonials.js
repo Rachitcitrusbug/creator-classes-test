@@ -33,11 +33,34 @@ function Testimonials() {
                 <div className="col-lg-12 col-md-12">
                   <div className="testimonials-slider-slider-root">
                     <OwlCarousel
-                      className="owl-carousel owl-theme testimonials-owl-div owl-loaded owl-drag"
+                      className="owl-carousel owl-theme testimonials-owl-div"
                       id="sync1"
-                      loop
+                      loop={true}
+                      items={3.2}
                       margin={15}
-                      nav
+                      nav={false}
+                      dots={false}
+                      stagePadding={0}
+                      autoplay={true}
+                      smartSpeed={2000}
+                      responsiveClass={true}
+                      responsive={{
+                        0: {
+                          items: 2,
+                          autoplay: true,
+                          center: true,
+                          margin: 8,
+                        },
+                        600: {
+                          items: 2.3,
+                        },
+                        1200: {
+                          items: 3.1,
+                        },
+                        1600: {
+                          items: 4.8,
+                        },
+                      }}
                     >
                       <div className="item">
                         <div className="testimonials-card-box">
@@ -407,7 +430,36 @@ function Testimonials() {
                     </OwlCarousel>
                   </div>
                   <div className="testimonial-thumb">
-                    <OwlCarousel id="sync2" className="owl-carousel owl-theme">
+                    <OwlCarousel
+                      id="sync2"
+                      className="owl-carousel owl-theme"
+                      loop={false}
+                      items={5}
+                      margin={10}
+                      nav={false}
+                      dots={false}
+                      stagePadding={0}
+                      autoplay={true}
+                      smartSpeed={2000}
+                      responsiveClass={true}
+                      responsive={{
+                        0: {
+                          items: 2,
+                          autoplay: true,
+                          center: true,
+                          margin: 8,
+                        },
+                        600: {
+                          items: 2.3,
+                        },
+                        1200: {
+                          items: 3.1,
+                        },
+                        1600: {
+                          items: 4.8,
+                        },
+                      }}
+                    >
                       <div className="item">
                         <div className="testimonial-profile">
                           <img src={T1} alt="" />
