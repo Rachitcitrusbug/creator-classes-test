@@ -1,6 +1,13 @@
-import React from "react";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 function About() {
+  const first_name = useSelector((state) => state.creatorDetails.first_name);
+  const last_name = useSelector((state) => state.creatorDetails.last_name);
+  const total_rating = useSelector((state) => state.creatorDetails.total_rating);
+  const other_skills = useSelector((state) => state.creatorDetails.other_skills);
+  const description = useSelector((state) => state.creatorDetails.description);
+
   return (
     <>
       <section className="about-creator-section" id="about-creator-section">
@@ -10,40 +17,32 @@ function About() {
               <div className="row">
                 <div className="col-lg-12 col-md-12">
                   <div className="heading-inner-div">
-                    <h2>About Michael Gray</h2>
+                    <h2>
+                      About {first_name} {last_name}
+                    </h2>
 
                     <div className="star-row-div">
                       <div className="star-left-div">
                         <ul className="star-rating-ul">
                           <li>
-                            <span className="material-icons star-custom-icon active">
-                              star
-                            </span>
+                            <span className="material-icons star-custom-icon active">star</span>
                           </li>
                           <li>
-                            <span className="material-icons star-custom-icon active">
-                              star
-                            </span>
+                            <span className="material-icons star-custom-icon active">star</span>
                           </li>
                           <li>
-                            <span className="material-icons star-custom-icon active">
-                              star
-                            </span>
+                            <span className="material-icons star-custom-icon active">star</span>
                           </li>
                           <li>
-                            <span className="material-icons star-custom-icon active">
-                              star
-                            </span>
+                            <span className="material-icons star-custom-icon active">star</span>
                           </li>
                           <li>
-                            <span className="material-icons star-custom-icon active">
-                              star
-                            </span>
+                            <span className="material-icons star-custom-icon active">star</span>
                           </li>
                         </ul>
                       </div>
                       <div className="star-right-div">
-                        <span className="text">(99)</span>
+                        <span className="text">({total_rating})</span>
                       </div>
                     </div>
 
@@ -54,38 +53,20 @@ function About() {
 
                       <div className="skill-category-inner">
                         <ul className="skill-list-ul">
-                          <li>
-                            <a href="" className="filter-link">
-                              Photography
-                            </a>
-                          </li>
-                          <li>
-                            <a href="" className="filter-link">
-                              Filmmaking
-                            </a>
-                          </li>
-                          <li>
-                            <a href="" className="filter-link">
-                              Business
-                            </a>
-                          </li>
+                          {other_skills.map((skill, index) => (
+                            <li key={index}>
+                              <a href="" className="filter-link">
+                                {skill}
+                              </a>
+                            </li>
+                          ))}
                         </ul>
                       </div>
                     </div>
 
                     <div className="user-desc-row">
                       <div className="desc-div">
-                        <p>
-                          Quisque velit nisi, pretium ut lacinia in, elementum
-                          id enim. Pellentesque in ipsum id orci porta dapibus.
-                          Vestibulum ac diam sit amet quam vehicula elementum
-                          sed sit amet dui. Vestibulum ac diam sit amet quam
-                          vehicula elementum sed sit amet dui. Cras ultricies
-                          ligula sed magna dictum porta. Curabitur non nulla sit
-                          amet nisl tempus convallis quis ac lectus. Lorem ipsum
-                          dolor sit amet, consectetur adipiscing elit. Donec
-                          sollicitudin molestie malesuada.
-                        </p>
+                        <p>{description}</p>
                       </div>
                     </div>
                   </div>

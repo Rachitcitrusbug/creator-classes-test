@@ -9,7 +9,7 @@ import Icon4 from '../../assets/images/icons-filter/icon-04.png';
 import Icon5 from '../../assets/images/icons-filter/icon-05.png';
 
 function UserBannerWithSearch() {
-  const username = useSelector((state) => state.username);
+  const username = useSelector((state) => state.userData.username);
 
   return (
     <>

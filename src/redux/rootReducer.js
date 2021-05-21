@@ -1,18 +1,12 @@
-import { combineReducers } from "redux";
-// import stepOneReducer from "./Reducers/stepOneReducer";
-// import stepTwoReducer from "./Reducers/stepTwoReducer";
-// import stepThreeReducer from "./Reducers/stepThreeReducer";
-// import stepFourReducer from "./Reducers/stepFourReducer";
-// import stepFiveReducer from "./Reducers/stepFiveReducer";
-// import stepSixReducer from "./Reducers/stepSixReducer";
+import { combineReducers } from 'redux';
+import userDataReducer from './Reducers/UserDataReducer';
+import userLoginReducer from './Reducers/UserLoginReducer';
+import creatorDetailsReducer from './Reducers/CreatorDetailsReducer';
 
 const rootReducer = combineReducers({
-  //   one: stepOneReducer,
-  //   two: stepTwoReducer,
-  //   three: stepThreeReducer,
-  //   four: stepFourReducer,
-  //   five: stepFiveReducer,
-  //   six: stepSixReducer,
+  userData: userDataReducer,
+  userLogin: userLoginReducer,
+  creatorDetails: creatorDetailsReducer,
 });
 
 export default rootReducer;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
@@ -10,6 +11,9 @@ import Img5 from '../../assets/images/materials/materials-img-05.jpg';
 import Img6 from '../../assets/images/materials/materials-img-06.jpg';
 
 function MaterialsByCreator() {
+  const first_name = useSelector((state) => state.creatorDetails.first_name);
+  const last_name = useSelector((state) => state.creatorDetails.last_name);
+
   return (
     <>
       <section className="materials-creators-section" id="materials-creators-section">
@@ -21,7 +25,9 @@ function MaterialsByCreator() {
                   <div className="heading-inner-div">
                     <div className="heading-title-row">
                       <div className="heading-title-left">
-                        <h2>Materials by Michael Gray </h2>
+                        <h2>
+                          Materials by {first_name} {last_name}
+                        </h2>
                       </div>
                       <div className="heading-title-right">
                         <div className="link-div">

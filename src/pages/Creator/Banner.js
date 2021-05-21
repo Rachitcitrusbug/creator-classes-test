@@ -1,7 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
-function Banner(props) {
+function Banner() {
+  const first_name = useSelector((state) => state.creatorDetails.first_name);
+  const last_name = useSelector((state) => state.creatorDetails.last_name);
+  const key_skill = useSelector((state) => state.creatorDetails.key_skill);
+  const total_rating = useSelector((state) => state.creatorDetails.total_rating);
+  const instagram_url = useSelector((state) => state.creatorDetails.instagram_url);
+  const youtube_url = useSelector((state) => state.creatorDetails.youtube_url);
+  const facebook_url = useSelector((state) => state.creatorDetails.facebook_url);
+
   return (
     <>
       <section className="main-inner-banner-section" id="main-inner-banner-section">
@@ -13,10 +21,9 @@ function Banner(props) {
                   <div className="content-banner">
                     <div className="text-content">
                       <h2>
-                        {' '}
-                        {props.data.creator.first_name} {props.data.creator.last_name}
+                        {first_name} {last_name}
                       </h2>
-                      <p>{props.data.creator.key_skill}</p>
+                      <p>{key_skill}</p>
                       <div className="star-row-div">
                         <div className="star-left-div">
                           <ul className="star-rating-ul">
@@ -38,7 +45,7 @@ function Banner(props) {
                           </ul>
                         </div>
                         <div className="star-right-div">
-                          <span className="text">(99)</span>
+                          <span className="text">({total_rating})</span>
                         </div>
                       </div>
                     </div>
@@ -47,16 +54,23 @@ function Banner(props) {
                       <ul className="social-list-ul">
                         <li>
                           {' '}
-                          <a href="" className="link">
+                          <a href={instagram_url} className="link" target="_blank" rel="noreferrer">
                             {' '}
                             <i className="fab fa-instagram"></i>{' '}
                           </a>{' '}
                         </li>
                         <li>
                           {' '}
-                          <a href="" className="link">
+                          <a href={youtube_url} className="link" target="_blank" rel="noreferrer">
                             {' '}
                             <i className="fab fa-youtube"></i>{' '}
+                          </a>{' '}
+                        </li>
+                        <li>
+                          {' '}
+                          <a href={facebook_url} className="link" target="_blank" rel="noreferrer">
+                            {' '}
+                            <i className="fab fa-facebook"></i>{' '}
                           </a>{' '}
                         </li>
                       </ul>
@@ -73,7 +87,3 @@ function Banner(props) {
 }
 
 export default Banner;
-
-Banner.propTypes = {
-  data: PropTypes.object,
-};

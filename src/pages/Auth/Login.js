@@ -39,7 +39,7 @@ function Login(props) {
                   };
                   props.userData(data);
                   localStorage.setItem('token', result.data.token);
-                  history.push('/user-home', { user: result.data });
+                  history.push('/user-home');
                 }
                 break;
               case 400:

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Banner from '../../pages/Creator/Banner';
 import About from '../../pages/Creator/About';
 import ClassesByCreator from '../../pages/Creator/ClassesByCreator';
@@ -9,13 +8,13 @@ import SimilarCreators from '../../pages/Creator/SimilarCreators';
 import CreatorFooter from '../../pages/Creator/CreatorFooter';
 import UserHeader from '../../pages/User/UserHeader';
 
-function CreatorDetails(props) {
+function CreatorDetails() {
   return (
     <>
       <div id="wrapper" className="wrapper home-wrapper">
         <UserHeader />
         <div className="main-middle-area pt-custom-0">
-          <Banner data={props.location.state} />
+          <Banner />
           <About />
           <ClassesByCreator />
           <UpcomingLiveStream />
@@ -29,7 +28,3 @@ function CreatorDetails(props) {
 }
 
 export default CreatorDetails;
-
-CreatorDetails.propTypes = {
-  location: PropTypes.object,
-};

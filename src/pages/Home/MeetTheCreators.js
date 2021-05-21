@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import { UserCreators } from '../../api/userCreatorsApi';
 import { CreatorProfileDetails } from '../../api/creatorProfileDetailsApi';
+import { creatorDetails } from '../../redux/Actions/CreatorDetailsAction';
 import Creator1 from '../../assets/images/creators/creators1.jpg';
 
-function MeetTheCreators() {
+function MeetTheCreators(props) {
   const history = useHistory();
-  // const authToken = localStorage.getItem('token');
+  const authToken = localStorage.getItem('token');
   const [creatorData, setCreatorData] = useState([]);
 
   const getUserCreators = () => {
@@ -53,7 +56,28 @@ function MeetTheCreators() {
           switch (result.code) {
             case 200:
               if (result.status == true) {
-                history.push('/creator', { creator: result.data });
+                const data = {
+                  email: result.data.email,
+                  first_name: result.data.first_name,
+                  last_name: result.data.last_name,
+                  username: result.data.username,
+                  profile_image: result.data.profile_image,
+                  description: result.data.description,
+                  country_details: result.data.country_details,
+                  key_skill: result.data.key_skill,
+                  other_skills: result.data.other_skills,
+                  instagram_url: result.data.instagram_url,
+                  youtube_url: result.data.youtube_url,
+                  facebook_url: result.data.facebook_url,
+                  creator_website_url: result.data.creator_website_url,
+                  total_rating: result.data.total_rating,
+                  creator_reviews: result.data.creator_reviews,
+                  affiliation_link: result.data.affiliation_link,
+                  is_fav: result.data.is_fav,
+                  country: result.data.country,
+                };
+                props.creatorDetails(data);
+                history.push('/creator');
               }
               break;
             case 400:
@@ -76,6 +100,10 @@ function MeetTheCreators() {
     }
   }
 
+  const handleClick = () => {
+    history.push('/login');
+  };
+
   return (
     <>
       <section className="meet-the-creators-section" id="meet-the-creators-section">
@@ -97,7 +125,7 @@ function MeetTheCreators() {
               <div className="row">
                 <div className="col-lg-12 col-md-12">
                   <div className="creators-owl-slider-main-slider">
-                    {creatorData.length > 0 && (
+                    {creatorData && creatorData.length > 0 && (
                       <OwlCarousel
                         className="owl-carousel owl-theme meet-the-creators-owl-div"
                         id="meet-the-creators-owl"
@@ -132,9 +160,10 @@ function MeetTheCreators() {
                           <div className="item" key={index}>
                             <div className="creators-img-mask-slider-box">
                               <Link
-                                // to={authToken ? '/creator' : '/login'}
                                 className="creators-img-link"
-                                onClick={() => handleCreatorDetails(obj.id)}
+                                onClick={
+                                  authToken ? () => handleCreatorDetails(obj.id) : handleClick
+                                }
                               >
                                 <div className="creators-img-mask-thumb">
                                   <div className="img-thumb">
@@ -165,9 +194,10 @@ function MeetTheCreators() {
                               <div className="creators-content-div">
                                 <h3>
                                   <Link
-                                    // to={authToken ? '/creator' : '/login'}
                                     className="link"
-                                    onClick={() => handleCreatorDetails(obj.id)}
+                                    onClick={
+                                      authToken ? () => handleCreatorDetails(obj.id) : handleClick
+                                    }
                                   >
                                     {obj.full_name}
                                   </Link>
@@ -190,4 +220,37 @@ function MeetTheCreators() {
   );
 }
 
-export default MeetTheCreators;
+const mapStateToProps = (state) => {
+  return {
+    email: state.email,
+    first_name: state.first_name,
+    last_name: state.last_name,
+    username: state.username,
+    profile_image: state.profile_image,
+    description: state.description,
+    country_details: state.country_details,
+    key_skill: state.key_skill,
+    other_skills: state.other_skills,
+    instagram_url: state.instagram_url,
+    youtube_url: state.youtube_url,
+    facebook_url: state.facebook_url,
+    creator_website_url: state.creator_website_url,
+    total_rating: state.total_rating,
+    creator_reviews: state.creator_reviews,
+    affiliation_link: state.affiliation_link,
+    is_fav: state.is_fav,
+    country: state.country,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    creatorDetails: (data) => dispatch(creatorDetails(data)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MeetTheCreators);
+
+MeetTheCreators.propTypes = {
+  creatorDetails: PropTypes.object,
+};

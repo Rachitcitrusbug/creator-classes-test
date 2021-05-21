@@ -17,6 +17,7 @@ import './assets/css/home-style.css';
 import './assets/css/style.css';
 import './assets/css/custom.css';
 import './assets/css/custom-forms-style.css';
+import './assets/css/user/general-card-style.css';
 import './assets/css/auth-style.css';
 import './assets/fonts/gilroy/gilroy-style.css';
 import './assets/fonts/moderat/moderat-style.css';
@@ -26,7 +27,9 @@ import './assets/css/tab-style.css';
 import './assets/css/creators-details-style.css';
 import './assets/css/user/user-home-style.css';
 import './assets/css/search-banner-style.css';
-import authStore from './redux/Store/AuthStore';
+import './assets/css/user/user-upcomming-live-streams-style.css';
+import './assets/css/user/book-a-seat-style.css';
+import Store from './redux/Store/Store';
 
 const Main = lazy(() => import('./components/Main'));
 const Login = lazy(() => import('./pages/Auth/Login'));
@@ -35,9 +38,14 @@ const ForgotPassword = lazy(() => import('./pages/Auth/ForgotPassword'));
 const ClassDetails = lazy(() => import('./components/User/ClassDetails'));
 const CreatorDetails = lazy(() => import('./components/User/CreatorDetails'));
 const UserHome = lazy(() => import('./components/User/UserHome'));
+const Card = lazy(() => import('./components/Payment/CardPayment'));
+const Paypal = lazy(() => import('./components/Payment/PaypalPayment'));
+const PaymentSuccessfull = lazy(() => import('./components/Payment/PaymentSuccessfull'));
+const LiveStreamDetails = lazy(() => import('./components/LiveStream/LiveStreamDetails'));
+const BookASeat = lazy(() => import('./components/LiveStream/BookASeat'));
 
 const App = () => (
-  <Provider store={authStore}>
+  <Provider store={Store}>
     <Router>
       <Suspense fallback="Loading...">
         <Route exact path="/" component={Main} />
@@ -47,6 +55,11 @@ const App = () => (
         <Route exact path="/class" component={ClassDetails} />
         <Route exact path="/creator" component={CreatorDetails} />
         <Route exact path="/user-home" component={UserHome} />
+        <Route exact path="/card" component={Card} />
+        <Route exact path="/paypal" component={Paypal} />
+        <Route exact path="/success" component={PaymentSuccessfull} />
+        <Route exact path="/live-stream" component={LiveStreamDetails} />
+        <Route exact path="/book-seat" component={BookASeat} />
       </Suspense>
     </Router>
   </Provider>

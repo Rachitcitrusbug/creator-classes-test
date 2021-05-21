@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
@@ -134,15 +135,15 @@ function UpcomingLiveStream() {
                                 <div className="book-button-div">
                                   <div className="btn-row">
                                     {' '}
-                                    <a
-                                      href=""
+                                    <Link
+                                      to="/live-stream"
                                       className="btn btn-common-primary"
                                       data-toggle="modal"
                                       data-target="#login-to-book-modal"
                                     >
                                       {' '}
                                       <i className="bg-custom-icon invoice-icon"></i> Book now{' '}
-                                    </a>{' '}
+                                    </Link>{' '}
                                   </div>
                                   <div className="text-center-row">
                                     <p className="text-italic">Hurry up! Only few seats are left</p>
@@ -231,15 +232,15 @@ function UpcomingLiveStream() {
                                 <div className="book-button-div">
                                   <div className="btn-row">
                                     {' '}
-                                    <a
-                                      href=""
+                                    <Link
+                                      to="/live-stream"
                                       className="btn btn-common-primary"
                                       data-toggle="modal"
                                       data-target="#login-to-book-modal"
                                     >
                                       {' '}
                                       <i className="bg-custom-icon invoice-icon"></i> Book now{' '}
-                                    </a>{' '}
+                                    </Link>{' '}
                                   </div>
                                   <div className="text-center-row">
                                     <p className="text-italic">Hurry up! Only few seats are left</p>

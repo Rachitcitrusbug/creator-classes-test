@@ -8,7 +8,7 @@ import Profile from '../../assets/images/profile.png';
 function UserHeader() {
   const history = useHistory();
   const authToken = localStorage.getItem('token');
-  const profile_image = useSelector((state) => state.profile_image);
+  const profile_image = useSelector((state) => state.userData.profile_image);
 
   const [offset, setOffset] = useState(0);
   const [className, setClassName] = useState('header-div no-collapse-header clearfix');

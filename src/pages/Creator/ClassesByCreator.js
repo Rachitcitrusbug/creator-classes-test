@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
@@ -9,6 +10,8 @@ import Img4 from '../../assets/images/slider-img/img-04.jpg';
 import Img5 from '../../assets/images/slider-img/img-05.jpg';
 
 function ClassesByCreator() {
+  const first_name = useSelector((state) => state.creatorDetails.first_name);
+  const last_name = useSelector((state) => state.creatorDetails.last_name);
   return (
     <>
       <section className="classes-by-creator-section" id="classes-by-creator-section">
@@ -18,7 +21,9 @@ function ClassesByCreator() {
               <div className="row">
                 <div className="col-lg-12 col-md-12">
                   <div className="heading-inner-div">
-                    <h2>Classes by Michael Gray</h2>
+                    <h2>
+                      Classes by {first_name} {last_name}
+                    </h2>
                   </div>
                 </div>
               </div>
@@ -85,7 +90,9 @@ function ClassesByCreator() {
                                 aliquet elit
                               </a>
                             </h3>
-                            <h4>Michael Gray</h4>
+                            <h4>
+                              {first_name} {last_name}
+                            </h4>
                           </div>
                         </div>
                       </div>
@@ -115,7 +122,9 @@ function ClassesByCreator() {
                                 aliquet elit
                               </a>
                             </h3>
-                            <h4>Michael Gray</h4>
+                            <h4>
+                              {first_name} {last_name}
+                            </h4>
                           </div>
                         </div>
                       </div>
@@ -145,7 +154,9 @@ function ClassesByCreator() {
                                 aliquet elit
                               </a>
                             </h3>
-                            <h4>Michael Gray</h4>
+                            <h4>
+                              {first_name} {last_name}
+                            </h4>
                           </div>
                         </div>
                       </div>
@@ -175,7 +186,9 @@ function ClassesByCreator() {
                                 aliquet elit
                               </a>
                             </h3>
-                            <h4>Michael Gray</h4>
+                            <h4>
+                              {first_name} {last_name}
+                            </h4>
                           </div>
                         </div>
                       </div>
@@ -205,7 +218,9 @@ function ClassesByCreator() {
                                 aliquet elit
                               </a>
                             </h3>
-                            <h4>Michael Gray</h4>
+                            <h4>
+                              {first_name} {last_name}
+                            </h4>
                           </div>
                         </div>
                       </div>
@@ -235,7 +250,9 @@ function ClassesByCreator() {
                                 aliquet elit
                               </a>
                             </h3>
-                            <h4>Michael Gray</h4>
+                            <h4>
+                              {first_name} {last_name}
+                            </h4>
                           </div>
                         </div>
                       </div>
