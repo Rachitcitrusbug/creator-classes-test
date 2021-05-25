@@ -1,15 +1,81 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import Icon1 from '../../assets/images/icons-filter/icon-01.png';
-import Icon2 from '../../assets/images/icons-filter/icon-02.png';
-import Icon3 from '../../assets/images/icons-filter/icon-03.png';
-import Icon4 from '../../assets/images/icons-filter/icon-04.png';
-import Icon5 from '../../assets/images/icons-filter/icon-05.png';
+import { UserClassFilterKeywords } from '../../api/userClassFilterKeywordsApi';
+import { UserClassesSearch } from '../../api/userClassesSearchApi';
 
 function UserBannerWithSearch() {
   const username = useSelector((state) => state.userData.username);
+  const [keywordData, setKeywordData] = useState([]);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState('');
+  const [classData, setClassData] = useState(undefined);
+
+  const getUserClassFilterKeywords = () => {
+    try {
+      UserClassFilterKeywords().then((result) => {
+        if (result) {
+          switch (result.code) {
+            case 200:
+              if (result.status == true) {
+                result.data.length > 0 && setKeywordData(result.data);
+              }
+              break;
+            case 400:
+              console.log('Bad request.');
+              break;
+            case 401:
+              console.log('Session Is Expired Please Login Again');
+              break;
+            case 500:
+              console.log('Server error.');
+              break;
+            default:
+              console.log(result.message);
+              break;
+          }
+        }
+      });
+    } catch (err) {
+      console.log('Something Went Wrong');
+    }
+  };
+
+  useEffect(() => {
+    getUserClassFilterKeywords();
+  }, []);
+
+  const handleSearch = () => {
+    try {
+      UserClassesSearch(query, filter).then((result) => {
+        if (result) {
+          switch (result.code) {
+            case 200:
+              if (result.status == true) {
+                setClassData(result.data);
+              }
+              break;
+            case 400:
+              console.log('Bad request.');
+              break;
+            case 401:
+              console.log('Session Is Expired Please Login Again');
+              break;
+            case 500:
+              console.log('Server error.');
+              break;
+            default:
+              console.log(result.message);
+              break;
+          }
+        }
+      });
+    } catch (err) {
+      console.log('Something Went Wrong');
+    }
+  };
+
+  console.log(classData);
 
   return (
     <>
@@ -28,7 +94,7 @@ function UserBannerWithSearch() {
                     <div className="search-box-div">
                       <div className="search-box-row">
                         <div className="search-group">
-                          <button className="btn btn-search-icon">
+                          <button className="btn btn-search-icon" onClick={handleSearch}>
                             {' '}
                             <i className="bg-custom-icon search-icon-new"></i>{' '}
                           </button>
@@ -36,6 +102,9 @@ function UserBannerWithSearch() {
                             type="text"
                             className="form-control"
                             placeholder="Search for courses ..."
+                            onChange={(e) => {
+                              setQuery(e.target.value);
+                            }}
                           />
                         </div>
                       </div>
@@ -44,62 +113,35 @@ function UserBannerWithSearch() {
                     <div className="filter-category-root-div">
                       <div className="filter-category-inner">
                         <ul className="filter-list-ul">
-                          <li className="active">
-                            <Link to="" className="filter-link">
+                          <li>
+                            <Link
+                              className="filter-link"
+                              onClick={() => {
+                                setFilter('');
+                              }}
+                            >
                               {' '}
                               All{' '}
                             </Link>
                           </li>
-                          <li>
-                            <Link to="" className="filter-link">
-                              {' '}
-                              <span className="icon-img-span">
+
+                          {keywordData.map((obj, index) => (
+                            <li key={index}>
+                              <Link
+                                className="filter-link"
+                                onClick={() => {
+                                  setFilter(obj.id);
+                                }}
+                              >
                                 {' '}
-                                <img src={Icon1} alt="img" className="img-fluid" />{' '}
-                              </span>{' '}
-                              <span className="span-text"> Underwater </span>{' '}
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to="" className="filter-link">
-                              {' '}
-                              <span className="icon-img-span">
-                                {' '}
-                                <img src={Icon3} alt="img" className="img-fluid" />{' '}
-                              </span>{' '}
-                              <span className="span-text"> Filmmaking </span>{' '}
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to="" className="filter-link">
-                              {' '}
-                              <span className="icon-img-span">
-                                {' '}
-                                <img src={Icon2} alt="img" className="img-fluid" />{' '}
-                              </span>{' '}
-                              <span className="span-text"> VFX </span>{' '}
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to="" className="filter-link">
-                              {' '}
-                              <span className="icon-img-span">
-                                {' '}
-                                <img src={Icon4} alt="img" className="img-fluid" />{' '}
-                              </span>{' '}
-                              <span className="span-text"> Design </span>{' '}
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to="" className="filter-link">
-                              {' '}
-                              <span className="icon-img-span">
-                                {' '}
-                                <img src={Icon5} alt="img" className="img-fluid" />{' '}
-                              </span>{' '}
-                              <span className="span-text"> Photography </span>{' '}
-                            </Link>
-                          </li>
+                                <span className="icon-img-span">
+                                  {' '}
+                                  <img src={obj.image} alt="img" className="img-fluid" />{' '}
+                                </span>{' '}
+                                <span className="span-text"> {obj.keyword} </span>{' '}
+                              </Link>
+                            </li>
+                          ))}
                         </ul>
                       </div>
                     </div>
@@ -115,7 +157,3 @@ function UserBannerWithSearch() {
 }
 
 export default UserBannerWithSearch;
-
-UserBannerWithSearch.propTypes = {
-  name: PropTypes.any,
-};
