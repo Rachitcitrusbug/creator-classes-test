@@ -1,6 +1,7 @@
 import { CREATOR_DETAILS } from '../Types/CreatorDetailsType';
 
 const initialState = {
+  id: '',
   email: '',
   first_name: '',
   last_name: '',
@@ -26,6 +27,7 @@ const creatorDetailsReducer = (state = initialState, action) => {
     case CREATOR_DETAILS:
       return {
         ...state,
+        id: action.payload.id,
         email: action.payload.email,
         first_name: action.payload.first_name,
         last_name: action.payload.last_name,

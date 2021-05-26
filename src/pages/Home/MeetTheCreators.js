@@ -57,6 +57,7 @@ function MeetTheCreators(props) {
             case 200:
               if (result.status == true) {
                 const data = {
+                  id: result.data.id,
                   email: result.data.email,
                   first_name: result.data.first_name,
                   last_name: result.data.last_name,
